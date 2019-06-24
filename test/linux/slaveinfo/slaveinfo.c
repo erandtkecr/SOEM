@@ -573,7 +573,7 @@ static int el2535_setup(uint16 slave)
     el2535_write16  (slave, 0x8000, 0x0D, 0);     // output in case of error
     el2535_writeu16 (slave, 0x8000, 0x0E, 65535); // output ramp
 
-    el2535_writeu8  (slave, 0x8000, 0x10, 10);    // current limit %
+    el2535_writeu8  (slave, 0x8000, 0x10, 100);    // current limit %
     el2535_writeu16 (slave, 0x8000, 0x12, 350);   // Kp
     el2535_writeu16 (slave, 0x8000, 0x13, 6);     // Ki
     el2535_writeu16 (slave, 0x8000, 0x14, 50);    // Kd
@@ -673,31 +673,9 @@ void slaveinfo(char *ifname)
               }
           }
 
-          ec_slave[10].CoEdetails &= ~ECT_COEDET_SDOCA;
-          ec_slave[11].CoEdetails &= ~ECT_COEDET_SDOCA;
-          ec_slave[2].CoEdetails &= ~ECT_COEDET_SDOCA;
-
-
+          ec_slave[4].CoEdetails &= ~ECT_COEDET_SDOCA;
           ec_config_map(&IOmap);
           ec_configdc();
-
-
-          out_el2535_1 = (out_EL2535t*) ec_slave[2].outputs;
-          out_el2535_1->en_dithering = 1;
-          out_el2535_1->en_cc = 1;
-          out_el2535_1->en_dithering2 = 0;
-          out_el2535_1->en_cc2 = 0;
-
-          in_el2535_1 = (in_EL2535t*) ec_slave[2].inputs;
-
-          printf("in 1: %X\r\n", ec_slave[2].inputs[0]);
-          printf("in 2: %X\r\n", ec_slave[2].inputs[1]);
-          printf("in 3: %X\r\n", ec_slave[2].inputs[2]);
-          printf("in 4: %X\r\n", ec_slave[2].inputs[3]);
-
-          printf("info 1: %X\r\n", in_el2535_1->info_data_1);
-          printf("info 2: %X\r\n", in_el2535_1->info_data_2);
-
 
           while(EcatError) printf("%s", ec_elist2string());
          printf("%d slaves found and configured.\n",ec_slavecount);

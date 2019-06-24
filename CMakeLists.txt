@@ -60,17 +60,22 @@ file(GLOB SOEM_HEADERS soem/*.h)
 file(GLOB OSAL_HEADERS osal/osal.h osal/${OS}/*.h)
 file(GLOB OSHW_HEADERS oshw/${OS}/*.h)
 
-include_directories(soem)
-include_directories(osal)
-include_directories(osal/${OS})
-include_directories(oshw/${OS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/soem)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oshw/${OS})
 
-add_library(soem STATIC
+add_library(soem SHARED
   ${SOEM_SOURCES}
   ${OSAL_SOURCES}
   ${OSHW_SOURCES}
   ${OSHW_EXTRA_SOURCES})
 target_link_libraries(soem ${OS_LIBS})
+target_include_directories(soem PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/soem
+        ${CMAKE_CURRENT_SOURCE_DIR}/osal
+        ${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/oshw/${OS})
 
 message("LIB_DIR: ${SOEM_LIB_INSTALL_DIR}")
 
