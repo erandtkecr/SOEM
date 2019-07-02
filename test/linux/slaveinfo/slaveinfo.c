@@ -563,7 +563,7 @@ static int el2535_setup(uint16 slave)
 
     el2535_writeu8  (slave, 0x1C13, 0x00, 1);
 
-    el2535_writeu8  (slave, 0x8000, 0x03, 0);     // en dithering
+    el2535_writeu8  (slave, 0x8000, 0x03, 1);     // en dithering
     el2535_writeu8  (slave, 0x8000, 0x04, 0);     // invert polarity
     el2535_writeu8  (slave, 0x8000, 0x05, 1);     // watchdog
 
@@ -673,10 +673,14 @@ void slaveinfo(char *ifname)
               }
           }
 
-          ec_slave[4].CoEdetails &= ~ECT_COEDET_SDOCA;
+          ec_slave[2].CoEdetails &= ~ECT_COEDET_SDOCA;
           ec_config_map(&IOmap);
           ec_configdc();
+          out_el2535_1 = (out_EL2535t *) ec_slave[2].outputs;
 
+          out_el2535_1->en_dithering = 1;
+          out_el2535_1->en_cc = 1;
+          
           while(EcatError) printf("%s", ec_elist2string());
          printf("%d slaves found and configured.\n",ec_slavecount);
          expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
