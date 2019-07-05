@@ -11,7 +11,7 @@ endif()
 
 set(SOEM_INCLUDE_INSTALL_DIR include/soem)
 set(SOEM_LIB_INSTALL_DIR lib)
-set(BUILD_TESTS FALSE)
+set(BUILD_TESTS TRUE)
 
 if(WIN32)
   set(OS "win32")
@@ -81,7 +81,9 @@ target_include_directories(soem PUBLIC
 
 message("LIB_DIR: ${SOEM_LIB_INSTALL_DIR}")
 
-install(TARGETS soem DESTINATION ${SOEM_LIB_INSTALL_DIR})
+
+install(TARGETS soem LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
+target_link_directories(soem PUBLIC ${CMAKE_INSTALL_BINDIR})
 install(FILES
   ${SOEM_HEADERS}
   ${OSAL_HEADERS}
