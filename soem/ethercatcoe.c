@@ -1345,7 +1345,14 @@ void ec_SDOerror(uint16 Slave, uint16 Index, uint8 SubIdx, int32 AbortCode)
 int ec_SDOread(uint16 slave, uint16 index, uint8 subindex,
                boolean CA, int *psize, void *p, int timeout)
 {
-   return ecx_SDOread(&ecx_context, slave, index, subindex, CA, psize, p, timeout);
+    if (ec_slavecount >= slave && slave > 0)
+    {
+        return ecx_SDOread(&ecx_context, slave, index, subindex, CA, psize, p, timeout);
+    }
+    else
+    {
+        return OUT_OF_BOUNDS_READ;
+    }
 }
 
 /** CoE SDO write, blocking. Single subindex or Complete Access.
@@ -1368,7 +1375,7 @@ int ec_SDOread(uint16 slave, uint16 index, uint8 subindex,
 int ec_SDOwrite(uint16 Slave, uint16 Index, uint8 SubIndex,
                 boolean CA, int psize, void *p, int Timeout)
 {
-   if (ec_slavecount >= Slave)
+   if (ec_slavecount >= Slave && Slave > 0)
    {
       return ecx_SDOwrite(&ecx_context, Slave, Index, SubIndex, CA, psize, p, Timeout);
    }
