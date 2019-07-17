@@ -62,6 +62,7 @@ file(GLOB SOEM_HEADERS soem/*.h)
 file(GLOB OSAL_HEADERS osal/osal.h osal/${OS}/*.h)
 file(GLOB OSHW_HEADERS oshw/${OS}/*.h)
 
+include_directories(${CRL_ETHERCAT_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/soem)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS})
@@ -74,6 +75,7 @@ add_library(soem SHARED
   ${OSHW_EXTRA_SOURCES})
 target_link_libraries(soem ${OS_LIBS})
 target_include_directories(soem PUBLIC
+        ${CRL_ETHERCAT_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/soem
         ${CMAKE_CURRENT_SOURCE_DIR}/osal
         ${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS}

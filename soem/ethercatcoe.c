@@ -18,6 +18,7 @@
 #include "ethercatbase.h"
 #include "ethercatmain.h"
 #include "ethercatcoe.h"
+#include "../../sharedTech/utilities/LibCrlEthercat/include/crl_ethercat_config.h"
 
 /** SDO structure, not to be confused with EcSDOserviceT */
 PACKED_BEGIN
@@ -1367,7 +1368,14 @@ int ec_SDOread(uint16 slave, uint16 index, uint8 subindex,
 int ec_SDOwrite(uint16 Slave, uint16 Index, uint8 SubIndex,
                 boolean CA, int psize, void *p, int Timeout)
 {
-   return ecx_SDOwrite(&ecx_context, Slave, Index, SubIndex, CA, psize, p, Timeout);
+   if (ec_slavecount >= Slave)
+   {
+      return ecx_SDOwrite(&ecx_context, Slave, Index, SubIndex, CA, psize, p, Timeout);
+   }
+   else
+   {
+      return OUT_OF_BOUNDS_WRITE;
+   }
 }
 
 /** CoE RxPDO write, blocking.
