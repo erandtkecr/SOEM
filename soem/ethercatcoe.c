@@ -18,7 +18,7 @@
 #include "ethercatbase.h"
 #include "ethercatmain.h"
 #include "ethercatcoe.h"
-#include "../../sharedTech/utilities/LibCrlEthercat/include/crl_ethercat_config.h"
+#include "../../sharedTech/utilities/LibCrlEthercat/include/crl_ethercat.h"
 
 /** SDO structure, not to be confused with EcSDOserviceT */
 PACKED_BEGIN
