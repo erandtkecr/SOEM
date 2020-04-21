@@ -84,7 +84,7 @@ target_include_directories(soem PUBLIC
 message("LIB_DIR: ${SOEM_LIB_INSTALL_DIR}")
 
 
-install(TARGETS soem LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS soem LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/system)
 target_link_directories(soem PUBLIC ${CMAKE_INSTALL_BINDIR})
 install(FILES
   ${SOEM_HEADERS}
