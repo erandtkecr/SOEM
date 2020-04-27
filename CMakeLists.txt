@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.4)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
 project(SOEM C)
 
+set(SOEM_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   # Default to installing in SOEM source directory
   set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/install)
@@ -60,28 +62,37 @@ file(GLOB SOEM_HEADERS soem/*.h)
 file(GLOB OSAL_HEADERS osal/osal.h osal/${OS}/*.h)
 file(GLOB OSHW_HEADERS oshw/${OS}/*.h)
 
-include_directories(soem)
-include_directories(osal)
-include_directories(osal/${OS})
-include_directories(oshw/${OS})
+include_directories(${CRL_ETHERCAT_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/soem)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/oshw/${OS})
 
-add_library(soem STATIC
+add_library(soem SHARED
   ${SOEM_SOURCES}
   ${OSAL_SOURCES}
   ${OSHW_SOURCES}
   ${OSHW_EXTRA_SOURCES})
 target_link_libraries(soem ${OS_LIBS})
+target_include_directories(soem PUBLIC
+        ${CRL_ETHERCAT_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/soem
+        ${CMAKE_CURRENT_SOURCE_DIR}/osal
+        ${CMAKE_CURRENT_SOURCE_DIR}/osal/${OS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/oshw/${OS})
 
 message("LIB_DIR: ${SOEM_LIB_INSTALL_DIR}")
 
-install(TARGETS soem DESTINATION ${SOEM_LIB_INSTALL_DIR})
+
+install(TARGETS soem LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/system)
+target_link_directories(soem PUBLIC ${CMAKE_INSTALL_BINDIR}/system)
 install(FILES
   ${SOEM_HEADERS}
   ${OSAL_HEADERS}
   ${OSHW_HEADERS}
   DESTINATION ${SOEM_INCLUDE_INSTALL_DIR})
 
-if(BUILD_TESTS) 
+if(BUILD_TESTS)
   add_subdirectory(test/linux/slaveinfo)
   add_subdirectory(test/linux/eepromtool)
   add_subdirectory(test/linux/simple_test)
